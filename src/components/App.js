@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { useState } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 import {
@@ -14,50 +13,47 @@ export const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  // const { good, neutral, bad } = this.state;
-  // const total = good + neutral + bad;
-  // const positiveFeedbackPercentage = Math.round((good / this.countTotalFeedback()) * 100);
-
-  onUpdateState = stateKey => {
-    this.setState(prevState => {
-      return {
-        [stateKey]: prevState[stateKey] + 1,
-      };
-    });
+  const onUpdateFeedback = key => {
+    switch (key) {
+      case good:
+        setGood(prevItem => prevItem + 1);
+        break;
+      case neutral:
+        setNeutral(prevItem => prevItem + 1);
+        break;
+      case bad:
+        setBad(prevItem => prevItem + 1);
+        break;
+      default:
+        break;
+    }
   };
 
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
+  const countTotalFeedback = () => {
     return good + neutral + bad;
   };
 
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    return Math.round((good / this.countTotalFeedback()) * 100);
+  const countPositiveFeedbackPercentage = () => {
+    return Math.round((good / countTotalFeedback()) * 100);
   };
 
-  const total = this.countTotalFeedback();
-  const positiveFeedbackPercentage = this.countPositiveFeedbackPercentage();
+  const total = countTotalFeedback();
+  const positiveFeedbackPercentage = countPositiveFeedbackPercentage();
+
+  const feedback = { good, neutral, bad };
+  const options = { good, neutral, bad, total, positiveFeedbackPercentage };
 
   return (
     <>
       <Section title="Please leave feedback">
         <FeedbackOptions
-          options={this.state}
-          onLeaveFeedback={this.onUpdateState}
+          options={feedback}
+          onLeaveFeedback={onUpdateFeedback}
         />
       </Section>
       <Section title="Statistics">
         <StatisticsStyle>
-          {total > 0 ? (
-            <Statistics
-              options={this.state}
-              total={total}
-              positivePercentage={positiveFeedbackPercentage}
-            />
-          ) : (
-            <Notification />
-          )}
+          {total > 0 ? <Statistics options={options} /> : <Notification />}
         </StatisticsStyle>
       </Section>
       <GlobalStyle />

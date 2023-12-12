@@ -1,7 +1,5 @@
 export const Statistics = ({
-  options: { good, neutral, bad },
-  total,
-  positivePercentage,
+  options: { good, neutral, bad, total, positivePercentage },
 }) => {
   return (
     <>
