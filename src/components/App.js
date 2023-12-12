@@ -15,13 +15,15 @@ export const App = () => {
 
   const onUpdateFeedback = key => {
     switch (key) {
-      case good:
+      case 'good':
         setGood(prevItem => prevItem + 1);
+
         break;
-      case neutral:
+      case 'neutral':
         setNeutral(prevItem => prevItem + 1);
+
         break;
-      case bad:
+      case 'bad':
         setBad(prevItem => prevItem + 1);
         break;
       default:
@@ -34,14 +36,15 @@ export const App = () => {
   };
 
   const countPositiveFeedbackPercentage = () => {
-    return Math.round((good / countTotalFeedback()) * 100);
+    const count = (good / countTotalFeedback()) * 100;
+    const positiveFeedbackPercentage = Math.round(count);
+    return positiveFeedbackPercentage;
   };
 
   const total = countTotalFeedback();
-  const positiveFeedbackPercentage = countPositiveFeedbackPercentage();
+  const positivePercentage = countPositiveFeedbackPercentage();
 
   const feedback = { good, neutral, bad };
-  const options = { good, neutral, bad, total, positiveFeedbackPercentage };
 
   return (
     <>
@@ -53,7 +56,13 @@ export const App = () => {
       </Section>
       <Section title="Statistics">
         <StatisticsStyle>
-          {total > 0 ? <Statistics options={options} /> : <Notification />}
+          {total > 0 ? (
+            <Statistics
+              options={{ good, neutral, bad, total, positivePercentage }}
+            />
+          ) : (
+            <Notification />
+          )}
         </StatisticsStyle>
       </Section>
       <GlobalStyle />
